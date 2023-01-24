@@ -1,4 +1,7 @@
 import { Fragment } from "react";
+
+import Link from "next/link";
+
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -27,9 +30,9 @@ export default function Navbar() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 justify-between">
               <div className="flex">
-                <div className="flex flex-shrink-0 items-center">
+                <Link href="/" className="flex flex-shrink-0 items-center">
                   Restaurants
-                </div>
+                </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 <button

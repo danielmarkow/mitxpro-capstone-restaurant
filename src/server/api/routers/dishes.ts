@@ -15,6 +15,13 @@ export const dishesRouter = createTRPCRouter({
         where: {
           restaurantId,
         },
+        include: {
+          restaurant: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
     }),
 });
