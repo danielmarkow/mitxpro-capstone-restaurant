@@ -37,6 +37,7 @@ model Dish {
     cart          Cart[]
 }
 
+// TODO check if a concatenated key of userId and dishId makes more sense
 model Cart {
     id        String   @id @default(cuid())
     user      User     @relation(fields: [userId], references: [id])

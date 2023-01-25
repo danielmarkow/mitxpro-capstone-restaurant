@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { useSession } from "next-auth/react";
+import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 
 import { api } from "../utils/api";
 
@@ -62,30 +63,17 @@ export default function Cart() {
                           </div>
 
                           <div className="mt-4 flex items-center sm:absolute sm:top-0 sm:left-1/2 sm:mt-0 sm:block">
-                            {/* <label
-                              htmlFor={`quantity-${itemIdx}`}
-                              className="sr-only"
-                            >
-                              Quantity, {item.dish.name}
-                            </label>
-                            <select
-                              id={`quantity-${itemIdx}`}
-                              name={`quantity-${itemIdx}`}
-                              className="block max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                            >
-                              <option value={1}>1</option>
-                              <option value={2}>2</option>
-                              <option value={3}>3</option>
-                              <option value={4}>4</option>
-                              <option value={5}>5</option>
-                              <option value={6}>6</option>
-                              <option value={7}>7</option>
-                              <option value={8}>8</option>
-                            </select> */}
                             <p className="text-right text-sm font-medium text-gray-900">
                               {item.quantity} x
                             </p>
-
+                            <div className="mt-2 flex justify-end gap-1">
+                              <button>
+                                <PlusCircleIcon className="h-5 w-5" />
+                              </button>
+                              <button>
+                                <MinusCircleIcon className="h-5 w-5" />
+                              </button>
+                            </div>
                             <button
                               type="button"
                               className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:ml-0 sm:mt-3"
