@@ -13,6 +13,8 @@ import superjson from "superjson";
 import { appRouter } from "../server/api/root";
 import { prisma } from "../server/db";
 
+import { useSession } from "next-auth/react";
+
 export async function getStaticProps(
   context: GetStaticPropsContext<{ restaurantId: string }>
 ) {
@@ -53,8 +55,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export default function DishesList(
   props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
+  const utils = api.useContext();
+
   const { restaurantId } = props;
   const dishes = api.dishes.getDishes.useQuery({ restaurantId });
+
+  const { data: sessionData } = useSession();
+  const addOneToCartMutation = api.cart.addOne.useMutation({
+    onSuccess: () => utils.cart.getCart.invalidate(),
+  });
 
   return (
     <>
@@ -82,9 +91,9 @@ export default function DishesList(
                         <h3 className="text-sm font-medium text-gray-900">
                           {dish.name}
                         </h3>
-                        {/* <p className="mt-1 text-sm text-gray-500">
-                          {product.color}
-                        </p> */}
+                        <p className="mt-1 text-sm text-gray-500">
+                          {dish.description}
+                        </p>
                       </div>
                       <div className="absolute inset-x-0 top-0 flex h-72 items-end justify-end overflow-hidden rounded-lg p-4">
                         <div
@@ -97,7 +106,15 @@ export default function DishesList(
                       </div>
                     </div>
                     <div className="mt-6">
-                      <button className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200">
+                      <button
+                        onClick={() =>
+                          addOneToCartMutation.mutate({
+                            userId: sessionData?.user?.id,
+                            dishId: dish.stripe_api_id,
+                          })
+                        }
+                        className="relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 py-2 px-8 text-sm font-medium text-gray-900 hover:bg-gray-200"
+                      >
                         Add to bag
                         <span className="sr-only">, {dish.name}</span>
                       </button>

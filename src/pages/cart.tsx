@@ -102,11 +102,9 @@ export default function Cart() {
                       <dd className="text-base font-medium text-gray-900">
                         $
                         {cart.isSuccess &&
-                          (cart.data.reduce(
-                            (a, b) =>
-                              a.quantity * a.dish.price +
-                              b.quantity * b.dish.price
-                          ) as any)}
+                          (cart.data.reduce((acc, item) => {
+                            return acc + item.quantity * item.dish.price;
+                          }, 0) as any)}
                       </dd>
                     </div>
                   </dl>

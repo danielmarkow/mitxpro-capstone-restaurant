@@ -50,9 +50,9 @@ export default function Navbar() {
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
                       {/* TODO test if it works when there is just one cart item */}
                       {cart.isSuccess &&
-                        (cart.data.reduce(
-                          (a, b) => a.quantity + b.quantity
-                        ) as any)}
+                        (cart.data.reduce((acc, item) => {
+                          return acc + item.quantity;
+                        }, 0) as any)}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </Popover.Button>
@@ -234,6 +234,7 @@ export default function Navbar() {
               </div>
             </div>
           </Disclosure.Panel>
+          {/* {JSON.stringify(cart.data)} */}
         </>
       )}
     </Disclosure>
