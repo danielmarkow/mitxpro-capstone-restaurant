@@ -1,7 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { useSession } from "next-auth/react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-hot-toast";
 
 import { api } from "../utils/api";
 
@@ -9,6 +11,29 @@ export default function Cart() {
   const { data: sessionData } = useSession();
   // TODO same query as in Navbar popout - maybe put in a context?
   const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
+  // TODO same mutation as in [restaurantId] - maybe put in a context?
+  const utils = api.useContext();
+
+  const addOneToCartMutation = api.cart.addOne.useMutation({
+    onSuccess: () => {
+      utils.cart.getCart.invalidate();
+      toast.success("successfully added dish to cart");
+    },
+  });
+
+  const removeOneFromCartMutation = api.cart.removeOne.useMutation({
+    onSuccess: () => {
+      utils.cart.getCart.invalidate();
+      toast.success("removed item from cart");
+    },
+  });
+
+  const deleteDishFromCartMutation = api.cart.deleteItem.useMutation({
+    onSuccess: () => {
+      utils.cart.getCart.invalidate();
+      toast.success("deleted dish from cart");
+    },
+  });
 
   return (
     <>
@@ -50,11 +75,6 @@ export default function Cart() {
                               <p className="mt-1 text-sm text-gray-500">
                                 {item.dish.description}
                               </p>
-                              {/* {product.size ? (
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.size}
-                                </p>
-                              ) : null} */}
                             </div>
 
                             <p className="text-right text-sm font-medium text-gray-900">
@@ -67,16 +87,39 @@ export default function Cart() {
                               {item.quantity} x
                             </p>
                             <div className="mt-2 flex justify-end gap-1">
-                              <button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  addOneToCartMutation.mutate({
+                                    userId: sessionData?.user?.id,
+                                    dishId: item.dish.stripe_api_id,
+                                  });
+                                }}
+                              >
                                 <PlusCircleIcon className="h-5 w-5" />
                               </button>
-                              <button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  removeOneFromCartMutation.mutate({
+                                    userId: sessionData?.user?.id,
+                                    dishId: item.dish.stripe_api_id,
+                                  });
+                                }}
+                              >
                                 <MinusCircleIcon className="h-5 w-5" />
                               </button>
                             </div>
                             <button
                               type="button"
                               className="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:ml-0 sm:mt-3"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                deleteDishFromCartMutation.mutate({
+                                  userId: sessionData?.user?.id,
+                                  dishId: item.dish.stripe_api_id,
+                                });
+                              }}
                             >
                               <span>Remove</span>
                             </button>
@@ -122,13 +165,13 @@ export default function Cart() {
               <div className="mt-6 text-center text-sm text-gray-500">
                 <p>
                   or
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     className="ml-1 font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Continue Shopping
                     <span aria-hidden="true"> &rarr;</span>
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>

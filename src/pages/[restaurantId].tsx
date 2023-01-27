@@ -14,6 +14,7 @@ import { appRouter } from "../server/api/root";
 import { prisma } from "../server/db";
 
 import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 export async function getStaticProps(
   context: GetStaticPropsContext<{ restaurantId: string }>
@@ -62,7 +63,10 @@ export default function DishesList(
 
   const { data: sessionData } = useSession();
   const addOneToCartMutation = api.cart.addOne.useMutation({
-    onSuccess: () => utils.cart.getCart.invalidate(),
+    onSuccess: () => {
+      utils.cart.getCart.invalidate();
+      toast.success("successfully added dish to cart");
+    },
   });
 
   return (
@@ -124,7 +128,6 @@ export default function DishesList(
               </div>
             </>
           )}
-          {/* {JSON.stringify(dishes)} */}
         </div>
       </div>
     </>

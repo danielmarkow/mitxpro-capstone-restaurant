@@ -38,7 +38,6 @@ export default function RestaurantList({ restaurants }: { restaurants: any }) {
                         {resto.description}
                       </p>
                     </div>
-                    <p className="text-sm font-medium text-gray-900">Rating</p>
                   </div>
                 </div>
               ))}

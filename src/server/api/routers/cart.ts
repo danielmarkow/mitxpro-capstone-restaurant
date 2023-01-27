@@ -12,6 +12,7 @@ export const cartRouter = createTRPCRouter({
         include: {
           dish: {
             select: {
+              stripe_api_id: true,
               name: true,
               price: true,
               image: true,

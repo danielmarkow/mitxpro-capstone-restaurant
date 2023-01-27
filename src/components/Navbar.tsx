@@ -107,7 +107,7 @@ export default function Navbar() {
                               href="/cart"
                               className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
                             >
-                              View Shopping Bag
+                              View Shopping Cart
                             </Link>
                           </p>
                         </form>
@@ -234,7 +234,6 @@ export default function Navbar() {
               </div>
             </div>
           </Disclosure.Panel>
-          {/* {JSON.stringify(cart.data)} */}
         </>
       )}
     </Disclosure>
