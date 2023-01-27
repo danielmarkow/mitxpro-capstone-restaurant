@@ -11,7 +11,7 @@ export default function Cart() {
   const { data: sessionData } = useSession();
   // TODO same query as in Navbar popout - maybe put in a context?
   const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
-  // TODO same mutation as in [restaurantId] - maybe put in a context?
+  // TODO same mutations used in multiple places - maybe put in a context?
   const utils = api.useContext();
 
   const addOneToCartMutation = api.cart.addOne.useMutation({
@@ -35,10 +35,14 @@ export default function Cart() {
     },
   });
 
+  const migrateCartToOrders = api.order.createOrders.useMutation({
+    onSuccess: () => utils.cart.getCart.invalidate(),
+  });
+
   const checkoutMutation = api.checkout.createPayment.useMutation({
     onSuccess(data, variables, context) {
-      console.log(data);
       window.location.assign(data.url);
+      migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
     },
   });
 

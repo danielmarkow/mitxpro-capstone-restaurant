@@ -19,8 +19,21 @@ function classNames(...classes: any[]) {
 
 export default function Navbar() {
   const { data: sessionData } = useSession();
+  const utils = api.useContext();
 
   const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
+
+  const migrateCartToOrders = api.order.createOrders.useMutation({
+    onSuccess: () => utils.cart.getCart.invalidate(),
+  });
+
+  const checkoutMutation = api.checkout.createPayment.useMutation({
+    onSuccess(data, variables, context) {
+      console.log(data);
+      window.location.assign(data.url);
+      migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
+    },
+  });
 
   const user = {
     name: sessionData?.user?.name,
@@ -98,6 +111,12 @@ export default function Navbar() {
                           <button
                             type="submit"
                             className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              checkoutMutation.mutate({
+                                userId: sessionData?.user?.id,
+                              });
+                            }}
                           >
                             Checkout
                           </button>
