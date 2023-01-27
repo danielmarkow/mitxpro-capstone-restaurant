@@ -139,11 +139,13 @@ export default function Navbar() {
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <img
+                      <Image
                         className="h-8 w-8 rounded-full"
                         // TODO add default user profile image
                         src={user.imageUrl}
-                        alt=""
+                        alt={user.name}
+                        height={600}
+                        width={450}
                       />
                     </Menu.Button>
                   </div>
@@ -172,19 +174,34 @@ export default function Navbar() {
                           )}
                         </Menu.Item>
                       ) : (
-                        <Menu.Item key={"Sign Out"}>
-                          {({ active }) => (
-                            <a
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                              onClick={() => signOut()}
-                            >
-                              Sign Out
-                            </a>
-                          )}
-                        </Menu.Item>
+                        <>
+                          <Menu.Item key={"User Profile"}>
+                            {({ active }) => (
+                              <Link
+                                href={`/user/${sessionData.user?.id}`}
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                User Profile
+                              </Link>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item key={"Sign Out"}>
+                            {({ active }) => (
+                              <a
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                                onClick={() => signOut()}
+                              >
+                                Sign Out
+                              </a>
+                            )}
+                          </Menu.Item>
+                        </>
                       )}
                     </Menu.Items>
                   </Transition>
@@ -232,14 +249,25 @@ export default function Navbar() {
               </div>
               <div className="mt-3 space-y-1">
                 {sessionData ? (
-                  <Disclosure.Button
-                    key={"Sign Out"}
-                    as="a"
-                    onClick={() => signOut()}
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                  >
-                    Sign Out
-                  </Disclosure.Button>
+                  <>
+                    <Disclosure.Button
+                      key={"User Profile"}
+                      as="a"
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    >
+                      <Link href={`/user/${sessionData.user?.id}`}>
+                        User Profile
+                      </Link>
+                    </Disclosure.Button>
+                    <Disclosure.Button
+                      key={"Sign Out"}
+                      as="a"
+                      onClick={() => signOut()}
+                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    >
+                      Sign Out
+                    </Disclosure.Button>
+                  </>
                 ) : (
                   <Disclosure.Button
                     key={"Sign In"}

@@ -56,4 +56,12 @@ export const orderRouter = createTRPCRouter({
         message: "cart item not found or is not accessable",
       });
     }),
+  getOrders: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(({ input, ctx }) => {
+      const { userId } = input;
+      return ctx.prisma.order.findMany({
+        where: { userId },
+      });
+    }),
 });
