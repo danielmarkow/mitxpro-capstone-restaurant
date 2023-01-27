@@ -35,6 +35,13 @@ export default function Cart() {
     },
   });
 
+  const checkoutMutation = api.checkout.createPayment.useMutation({
+    onSuccess(data, variables, context) {
+      console.log(data);
+      window.location.assign(data.url);
+    },
+  });
+
   return (
     <>
       <div className="bg-white">
@@ -157,6 +164,10 @@ export default function Cart() {
                 <button
                   type="submit"
                   className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    checkoutMutation.mutate({ userId: sessionData?.user?.id });
+                  }}
                 >
                   Checkout
                 </button>
