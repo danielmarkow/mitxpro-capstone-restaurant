@@ -62,6 +62,14 @@ export const orderRouter = createTRPCRouter({
       const { userId } = input;
       return ctx.prisma.order.findMany({
         where: { userId },
+        include: {
+          dish: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
       });
     }),
 });

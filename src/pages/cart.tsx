@@ -51,11 +51,11 @@ export default function Cart() {
       <div className="bg-white">
         <div className="mx-auto max-w-4xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Shopping Cart
+            shopping cart
           </h1>
           <form className="mt-12">
             <div>
-              <h2 className="sr-only">Items in your shopping cart</h2>
+              <h2 className="sr-only">items in your shopping cart</h2>
 
               <ul
                 role="list"
@@ -144,13 +144,13 @@ export default function Cart() {
             {/* Order summary */}
             <div className="mt-10 sm:ml-32 sm:pl-6">
               <div className="rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:p-8">
-                <h2 className="sr-only">Order summary</h2>
+                <h2 className="sr-only">order summary</h2>
 
                 <div className="flow-root">
                   <dl className="-my-4 divide-y divide-gray-200 text-sm">
                     <div className="flex items-center justify-between py-4">
                       <dt className="text-base font-medium text-gray-900">
-                        Order total
+                        order total
                       </dt>
                       {/* TODO make sure this works with zero items */}
                       <dd className="text-base font-medium text-gray-900">
@@ -173,7 +173,7 @@ export default function Cart() {
                     checkoutMutation.mutate({ userId: sessionData?.user?.id });
                   }}
                 >
-                  Checkout
+                  checkout
                 </button>
               </div>
 
@@ -184,7 +184,7 @@ export default function Cart() {
                     href="/"
                     className="ml-1 font-medium text-indigo-600 hover:text-indigo-500"
                   >
-                    Continue Shopping
+                    continue shopping
                     <span aria-hidden="true"> &rarr;</span>
                   </Link>
                 </p>
