@@ -6,8 +6,6 @@ import { api } from "../utils/api";
 import RestaurantList from "../components/RestaurantList";
 
 const Home: NextPage = (props) => {
-  const restaurants = api.restaurants.getRestaurants.useQuery();
-
   return (
     <>
       <Head>
@@ -20,7 +18,7 @@ const Home: NextPage = (props) => {
       </Head>
       <main>
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <RestaurantList restaurants={restaurants} />
+          <RestaurantList />
         </div>
       </main>
     </>
