@@ -9,7 +9,7 @@
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["cdn.discordapp.com"],
+    domains: ["cdn.discordapp.com", "s.gravatar.com"],
   },
   swcMinify: true,
   i18n: {
