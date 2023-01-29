@@ -21,7 +21,12 @@ export default function Navbar() {
   const { data: sessionData } = useSession();
   const utils = api.useContext();
 
-  const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
+  const cart = api.cart.getCart.useQuery(
+    { userId: sessionData?.user?.id },
+    {
+      queryKey: ["cart", "getCart", sessionData],
+    }
+  );
 
   const migrateCartToOrders = api.order.createOrders.useMutation({
     onSuccess: () => utils.cart.getCart.invalidate(),
@@ -53,16 +58,89 @@ export default function Navbar() {
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
+                {/* Profile dropdown */}
+                {sessionData ? (
+                  <>
+                    <p className="text-sm text-gray-400">
+                      {sessionData.user?.email}
+                    </p>
+                    <Menu as="div" className="relative ml-3">
+                      <div>
+                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                          <span className="sr-only">Open user menu</span>
+                          <Image
+                            className="h-8 w-8 rounded-full"
+                            src={user.imageUrl}
+                            alt={user.name}
+                            height={600}
+                            width={450}
+                          />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {
+                            <>
+                              <Menu.Item key={"User Profile"}>
+                                {({ active }) => (
+                                  <Link
+                                    href={`/user/${sessionData.user?.id}`}
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                  >
+                                    User Profile
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item key={"Sign Out"}>
+                                {({ active }) => (
+                                  <a
+                                    className={classNames(
+                                      active ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )}
+                                    onClick={() => signOut()}
+                                  >
+                                    Sign Out
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            </>
+                          }
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => signIn()}
+                    className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    <div className="flex">
+                      <div className="cursor-pointer">login to order</div>
+                    </div>
+                  </button>
+                )}
                 {/* Shopping cart dropdown */}
-                <Popover className="z-50 ml-4 flow-root text-sm lg:relative lg:ml-8">
+                <Popover className="z-50 ml-2 flow-root text-sm lg:relative lg:ml-4">
                   <Popover.Button className="group -m-2 mr-1 flex items-center p-2">
                     <ShoppingCartIcon
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {/* TODO test if it works when there is just one cart item */}
-                      {cart.isSuccess &&
+                      {sessionData &&
+                        cart.isSuccess &&
                         (cart.data.reduce((acc, item) => {
                           return acc + item.quantity;
                         }, 0) as any)}
@@ -81,7 +159,7 @@ export default function Navbar() {
                     <Popover.Panel className="absolute inset-x-0 top-16 mt-px bg-white pb-6 shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:mt-3 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5">
                       <h2 className="sr-only">Shopping Cart</h2>
 
-                      {cart.isSuccess && (
+                      {sessionData && cart.isSuccess && (
                         <form className="mx-auto max-w-2xl px-4">
                           <ul role="list" className="divide-y divide-gray-200">
                             {cart.isSuccess &&
@@ -134,78 +212,6 @@ export default function Navbar() {
                     </Popover.Panel>
                   </Transition>
                 </Popover>
-                {/* Profile dropdown */}
-                <Menu as="div" className="relative ml-3">
-                  <div>
-                    <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                      <span className="sr-only">Open user menu</span>
-                      <Image
-                        className="h-8 w-8 rounded-full"
-                        // TODO add default user profile image
-                        src={user.imageUrl}
-                        alt={user.name}
-                        height={600}
-                        width={450}
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {!sessionData ? (
-                        <Menu.Item key={"Sign In"}>
-                          {({ active }) => (
-                            <a
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                              onClick={() => signIn()}
-                            >
-                              Sign In
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ) : (
-                        <>
-                          <Menu.Item key={"User Profile"}>
-                            {({ active }) => (
-                              <Link
-                                href={`/user/${sessionData.user?.id}`}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                User Profile
-                              </Link>
-                            )}
-                          </Menu.Item>
-                          <Menu.Item key={"Sign Out"}>
-                            {({ active }) => (
-                              <a
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                                onClick={() => signOut()}
-                              >
-                                Sign Out
-                              </a>
-                            )}
-                          </Menu.Item>
-                        </>
-                      )}
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 {/* Mobile menu button */}
@@ -224,13 +230,17 @@ export default function Navbar() {
           <Disclosure.Panel className="sm:hidden">
             <div className="border-t border-gray-200 pt-4 pb-3">
               <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={user.imageUrl}
-                    alt=""
-                  />
-                </div>
+                {sessionData && (
+                  <div className="flex-shrink-0">
+                    <Image
+                      className="h-10 w-10 rounded-full"
+                      height={600}
+                      width={450}
+                      src={user.imageUrl}
+                      alt={`image of ${user.name}`}
+                    />
+                  </div>
+                )}
                 <div className="ml-3">
                   <div className="text-base font-medium text-gray-800">
                     {user.name}

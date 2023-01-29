@@ -10,7 +10,12 @@ import { api } from "../utils/api";
 export default function Cart() {
   const { data: sessionData } = useSession();
   // TODO same query as in Navbar popout - maybe put in a context?
-  const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
+  const cart = api.cart.getCart.useQuery(
+    { userId: sessionData?.user?.id },
+    {
+      queryKey: ["cart", "getCart", sessionData],
+    }
+  );
   // TODO same mutations used in multiple places - maybe put in a context?
   const utils = api.useContext();
 

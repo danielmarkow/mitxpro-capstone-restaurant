@@ -10,6 +10,8 @@ import { Toaster } from "react-hot-toast";
 
 import "../styles/globals.css";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
@@ -19,6 +21,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Toaster />
       <Navbar />
       <Component {...pageProps} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </SessionProvider>
   );
 };

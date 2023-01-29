@@ -15,6 +15,8 @@ import { prisma } from "../server/db";
 
 import { useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
+import SearchBar from "../components/common/SearchBar";
 
 export async function getStaticProps(
   context: GetStaticPropsContext<{ restaurantId: string }>
@@ -56,10 +58,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export default function DishesList(
   props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
+  const [dishName, setDishName] = useState("");
   const utils = api.useContext();
 
   const { restaurantId } = props;
-  const dishes = api.dishes.getDishes.useQuery({ restaurantId });
+  const dishes = api.dishes.getDishes.useQuery(
+    { restaurantId },
+    {
+      select: (dishes) => {
+        if (dishName === "") {
+          return dishes;
+        }
+        return dishes.filter((d) =>
+          d.name.toLocaleLowerCase().includes(dishName.toLowerCase())
+        );
+      },
+    }
+  );
 
   const { data: sessionData } = useSession();
   const addOneToCartMutation = api.cart.addOne.useMutation({
@@ -73,6 +88,11 @@ export default function DishesList(
     <>
       <div className="bg-white">
         <div className="mx-auto max-w-2xl py-8 px-4 sm:py-10 sm:px-6 lg:max-w-7xl lg:px-8">
+          <SearchBar
+            value={dishName}
+            setValue={setDishName}
+            placeholder={"search dishes"}
+          />
           {dishes.isSuccess && (
             <>
               <h2 className="text-xl font-bold text-gray-900">
