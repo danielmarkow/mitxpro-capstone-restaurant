@@ -17,7 +17,7 @@ const dishes: Array<Dish> = [
     description: "organic beef ribeye",
     image: "mono-steak.jpg",
     price: 49.99,
-    restaurantId: "cld8qdwsp0000e96yvt4avhwm",
+    restaurantId: "cldhqul5c0000psub60zlgdlu",
   },
   {
     stripe_api_id: "price_1MTOPEFxWqY7tc2qicI2JAKQ",
@@ -25,7 +25,7 @@ const dishes: Array<Dish> = [
     description: "mono sushi selection extra fresh",
     image: "mono-sushi.jpg",
     price: 62.99,
-    restaurantId: "cld8qdwsp0000e96yvt4avhwm",
+    restaurantId: "cldhqul5c0000psub60zlgdlu",
   },
   {
     stripe_api_id: "price_1MTOPjFxWqY7tc2qCbFausOM",
@@ -33,7 +33,7 @@ const dishes: Array<Dish> = [
     description: "vietnamese style salat with beef",
     image: "littlehanoi-salat.jpg",
     price: 18.99,
-    restaurantId: "cld8qdwsq0002e96ykyo1c5a3",
+    restaurantId: "cldhqul5d0002psubab4df3p0",
   },
   {
     stripe_api_id: "price_1MTOQOFxWqY7tc2qU3G0ofgJ",
@@ -41,7 +41,7 @@ const dishes: Array<Dish> = [
     description: "vietnamese style pho soup, extra chili",
     image: "littlehanoi-pho.jpg",
     price: 14.45,
-    restaurantId: "cld8qdwsq0002e96ykyo1c5a3",
+    restaurantId: "cldhqul5d0002psubab4df3p0",
   },
   {
     stripe_api_id: "price_1MTOROFxWqY7tc2qe00gzb1n",
@@ -49,7 +49,7 @@ const dishes: Array<Dish> = [
     description: "half a roasted chicken with knoedel and kraut",
     image: "heinrich-bird.jpg",
     price: 28.75,
-    restaurantId: "cld8qdwsq0004e96yqurv4gvz",
+    restaurantId: "cldhqul5d0004psubh8s0rrc6",
   },
   {
     stripe_api_id: "price_1MTORzFxWqY7tc2qfLfW7shH",
@@ -57,7 +57,7 @@ const dishes: Array<Dish> = [
     description: "pork with side dishes",
     image: "heinrich-steak.jpg",
     price: 39.99,
-    restaurantId: "cld8qdwsq0004e96yqurv4gvz",
+    restaurantId: "cldhqul5d0004psubh8s0rrc6",
   },
 ];
 
