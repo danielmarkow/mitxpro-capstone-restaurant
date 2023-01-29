@@ -5,7 +5,7 @@ import { TRPCError } from "@trpc/server";
 
 export const orderRouter = createTRPCRouter({
   createOrders: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.string().optional() }))
     .mutation(async ({ input, ctx }) => {
       const { userId } = input;
 

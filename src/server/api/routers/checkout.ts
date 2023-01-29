@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export const checkoutRouter = createTRPCRouter({
   createPayment: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.string().optional() }))
     .mutation(async ({ input, ctx }) => {
       const { userId } = input;
       const userCart = await ctx.prisma.cart.findMany({

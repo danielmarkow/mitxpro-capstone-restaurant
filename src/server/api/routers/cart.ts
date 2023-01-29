@@ -4,7 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const cartRouter = createTRPCRouter({
   getCart: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(z.object({ userId: z.string().optional() }))
     .query(({ input, ctx }) => {
       const { userId } = input;
       return ctx.prisma.cart.findMany({
@@ -23,7 +23,7 @@ export const cartRouter = createTRPCRouter({
       });
     }),
   addOne: protectedProcedure
-    .input(z.object({ userId: z.string(), dishId: z.string() }))
+    .input(z.object({ userId: z.string().optional(), dishId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const { userId, dishId } = input;
       // check if dish is already in the cart
@@ -52,7 +52,7 @@ export const cartRouter = createTRPCRouter({
       });
     }),
   removeOne: protectedProcedure
-    .input(z.object({ userId: z.string(), dishId: z.string() }))
+    .input(z.object({ userId: z.string().optional(), dishId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const { userId, dishId } = input;
       // check if dish is already in the cart
@@ -86,7 +86,7 @@ export const cartRouter = createTRPCRouter({
       }
     }),
   deleteItem: protectedProcedure
-    .input(z.object({ userId: z.string(), dishId: z.string() }))
+    .input(z.object({ userId: z.string().optional(), dishId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const { userId, dishId } = input;
       // check if the item exists in the cart
