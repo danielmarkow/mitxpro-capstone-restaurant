@@ -13,9 +13,9 @@ import {
 
 import { api } from "../utils/api";
 
-function classNames(...classes: any[]) {
+const classNames = (...classes: any[]) => {
   return classes.filter(Boolean).join(" ");
-}
+};
 
 export default function Navbar() {
   const { data: sessionData } = useSession();
@@ -139,11 +139,12 @@ export default function Navbar() {
                       aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {sessionData &&
-                        cart.isSuccess &&
-                        (cart.data.reduce((acc, item) => {
-                          return acc + item.quantity;
-                        }, 0) as any)}
+                      {sessionData
+                        ? cart.isSuccess &&
+                          (cart.data.reduce((acc, item) => {
+                            return acc + item.quantity;
+                          }, 0) as any)
+                        : 0}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </Popover.Button>
@@ -208,6 +209,11 @@ export default function Navbar() {
                             </Link>
                           </p>
                         </form>
+                      )}
+                      {!sessionData && (
+                        <p className="mt-1 ml-1 text-sm text-gray-400">
+                          log in to view cart
+                        </p>
                       )}
                     </Popover.Panel>
                   </Transition>
