@@ -41,7 +41,7 @@ export default function Cart() {
 
   const checkoutMutation = api.checkout.createPayment.useMutation({
     onSuccess(data, variables, context) {
-      window.location.assign(data.url);
+      window.location.assign(data.url as any);
       migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
     },
   });

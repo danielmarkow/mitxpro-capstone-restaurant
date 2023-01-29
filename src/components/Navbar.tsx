@@ -21,12 +21,7 @@ export default function Navbar() {
   const { data: sessionData } = useSession();
   const utils = api.useContext();
 
-  const cart = api.cart.getCart.useQuery(
-    { userId: sessionData?.user?.id },
-    {
-      queryKey: ["cart", "getCart", sessionData],
-    }
-  );
+  const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
 
   const migrateCartToOrders = api.order.createOrders.useMutation({
     onSuccess: () => utils.cart.getCart.invalidate(),
@@ -35,7 +30,7 @@ export default function Navbar() {
   const checkoutMutation = api.checkout.createPayment.useMutation({
     onSuccess(data, variables, context) {
       console.log(data);
-      window.location.assign(data.url);
+      window.location.assign(data.url as any);
       migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
     },
   });
