@@ -4,7 +4,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const cartRouter = createTRPCRouter({
   getCart: protectedProcedure
-    .input(z.object({ userId: z.string().optional() }))
+    .input(z.object({ userId: z.string() }))
     .query(({ input, ctx }) => {
       const { userId } = input;
       return ctx.prisma.cart.findMany({

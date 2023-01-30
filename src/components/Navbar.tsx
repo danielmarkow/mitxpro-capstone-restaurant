@@ -65,8 +65,8 @@ export default function Navbar() {
                           <span className="sr-only">Open user menu</span>
                           <Image
                             className="h-8 w-8 rounded-full"
-                            src={user.imageUrl}
-                            alt={user.name}
+                            src={user.imageUrl as string}
+                            alt={user.name as string}
                             height={600}
                             width={450}
                           />
@@ -237,7 +237,7 @@ export default function Navbar() {
                       className="h-10 w-10 rounded-full"
                       height={600}
                       width={450}
-                      src={user.imageUrl}
+                      src={user.imageUrl as string}
                       alt={`image of ${user.name}`}
                     />
                   </div>
