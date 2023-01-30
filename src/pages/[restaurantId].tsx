@@ -82,6 +82,9 @@ export default function DishesList(
       utils.cart.getCart.invalidate().catch((error) => console.log(error));
       toast.success("successfully added dish to cart");
     },
+    onError: () => {
+      toast.error("log in to add items to cart");
+    },
   });
 
   return (
