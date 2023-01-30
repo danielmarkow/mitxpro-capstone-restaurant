@@ -1,10 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "../utils/api";
-
 import RestaurantList from "../components/RestaurantList";
 
+// eslint-disable-next-line
 const Home: NextPage = (props) => {
   return (
     <>

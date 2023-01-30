@@ -2,8 +2,9 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import Stripe from "stripe";
 
+// eslint-disable-next-line
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2020-08-27",
+  apiVersion: "2022-11-15",
 });
 
 export const checkoutRouter = createTRPCRouter({
@@ -22,14 +23,16 @@ export const checkoutRouter = createTRPCRouter({
         },
       });
 
-      let stripeData = userCart.map((item) => {
+      const stripeData = userCart.map((item) => {
         return { price: item.dish.stripe_api_id, quantity: item.quantity };
       });
 
       const session = await stripe.checkout.sessions.create({
         line_items: stripeData,
         mode: "payment",
+        // eslint-disable-next-line
         success_url: process.env.SUCCESS_URL!,
+        // eslint-disable-next-line
         cancel_url: process.env.CANCEL_URL!,
       });
 

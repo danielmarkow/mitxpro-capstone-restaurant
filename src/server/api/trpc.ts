@@ -128,7 +128,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 // create context based of incoming request
 // set as optional here so it can also be re-used for `getStaticProps()`
 
-export const createContext = async (opts?: CreateNextContextOptions) => {
+export const createContext = (opts?: CreateNextContextOptions) => {
   return {
     req: opts?.req,
     prisma,

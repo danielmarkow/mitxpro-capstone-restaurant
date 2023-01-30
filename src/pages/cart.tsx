@@ -11,7 +11,7 @@ export default function Cart() {
   const { data: sessionData } = useSession();
   // TODO same query as in Navbar popout - maybe put in a context?
   const cart = api.cart.getCart.useQuery(
-    { userId: sessionData?.user?.id },
+    { userId: sessionData?.user?.id as string },
     { enabled: !!sessionData }
   );
   // TODO same mutations used in multiple places - maybe put in a context?
@@ -19,21 +19,21 @@ export default function Cart() {
 
   const addOneToCartMutation = api.cart.addOne.useMutation({
     onSuccess: () => {
-      utils.cart.getCart.invalidate();
+      utils.cart.getCart.invalidate().catch((error) => console.log(error));
       toast.success("successfully added dish to cart");
     },
   });
 
   const removeOneFromCartMutation = api.cart.removeOne.useMutation({
     onSuccess: () => {
-      utils.cart.getCart.invalidate();
+      utils.cart.getCart.invalidate().catch((error) => console.log(error));
       toast.success("removed item from cart");
     },
   });
 
   const deleteDishFromCartMutation = api.cart.deleteItem.useMutation({
     onSuccess: () => {
-      utils.cart.getCart.invalidate();
+      utils.cart.getCart.invalidate().catch((error) => console.log(error));
       toast.success("deleted dish from cart");
     },
   });
@@ -43,8 +43,8 @@ export default function Cart() {
   });
 
   const checkoutMutation = api.checkout.createPayment.useMutation({
-    onSuccess(data, variables, context) {
-      window.location.assign(data.url as any);
+    onSuccess(data) {
+      window.location.assign(data.url as string);
       migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
     },
   });
@@ -65,7 +65,7 @@ export default function Cart() {
                 className="divide-y divide-gray-200 border-t border-b border-gray-200"
               >
                 {cart.isSuccess &&
-                  cart.data.map((item, itemIdx) => (
+                  cart.data.map((item) => (
                     <li key={item.id} className="flex py-6 sm:py-10">
                       <div className="flex-shrink-0">
                         <Image
@@ -159,9 +159,9 @@ export default function Cart() {
                       <dd className="text-base font-medium text-gray-900">
                         $
                         {cart.isSuccess &&
-                          (cart.data.reduce((acc, item) => {
+                          cart.data.reduce((acc, item) => {
                             return acc + item.quantity * item.dish.price;
-                          }, 0) as any)}
+                          }, 0)}
                       </dd>
                     </div>
                   </dl>

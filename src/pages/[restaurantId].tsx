@@ -3,7 +3,7 @@ import Image from "next/image";
 import { api } from "../utils/api";
 
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import {
+import type {
   GetStaticPropsContext,
   InferGetStaticPropsType,
   GetStaticPaths,
@@ -21,9 +21,9 @@ import SearchBar from "../components/common/SearchBar";
 export async function getStaticProps(
   context: GetStaticPropsContext<{ restaurantId: string }>
 ) {
-  const ssg = await createProxySSGHelpers({
+  const ssg = createProxySSGHelpers({
     router: appRouter,
-    ctx: {},
+    ctx: { session: null, prisma: prisma },
     transformer: superjson,
   });
   const restaurantId = context.params?.restaurantId as string;
@@ -79,7 +79,7 @@ export default function DishesList(
   const { data: sessionData } = useSession();
   const addOneToCartMutation = api.cart.addOne.useMutation({
     onSuccess: () => {
-      utils.cart.getCart.invalidate();
+      utils.cart.getCart.invalidate().catch((error) => console.log(error));
       toast.success("successfully added dish to cart");
     },
   });

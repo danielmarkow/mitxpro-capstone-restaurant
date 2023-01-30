@@ -43,7 +43,7 @@ export const orderRouter = createTRPCRouter({
             where: { id: item.id },
           });
         });
-
+        // eslint-disable-next-line
         const deletedCartItems = await ctx.prisma.$transaction(
           cartItemsToDelete
         );

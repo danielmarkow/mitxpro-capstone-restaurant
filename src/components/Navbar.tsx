@@ -21,16 +21,19 @@ export default function Navbar() {
   const { data: sessionData } = useSession();
   const utils = api.useContext();
 
-  const cart = api.cart.getCart.useQuery({ userId: sessionData?.user?.id });
+  const cart = api.cart.getCart.useQuery(
+    { userId: sessionData?.user?.id as string },
+    { enabled: !!sessionData }
+  );
 
   const migrateCartToOrders = api.order.createOrders.useMutation({
     onSuccess: () => utils.cart.getCart.invalidate(),
   });
 
   const checkoutMutation = api.checkout.createPayment.useMutation({
-    onSuccess(data, variables, context) {
+    onSuccess(data) {
       console.log(data);
-      window.location.assign(data.url as any);
+      window.location.assign(data.url as string);
       migrateCartToOrders.mutate({ userId: sessionData?.user?.id });
     },
   });
@@ -87,7 +90,9 @@ export default function Navbar() {
                               <Menu.Item key={"User Profile"}>
                                 {({ active }) => (
                                   <Link
-                                    href={`/user/${sessionData.user?.id}`}
+                                    href={`/user/${
+                                      sessionData.user?.id as string
+                                    }`}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
@@ -104,6 +109,7 @@ export default function Navbar() {
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
+                                    // eslint-disable-next-line
                                     onClick={() => signOut()}
                                   >
                                     Sign Out
@@ -118,6 +124,7 @@ export default function Navbar() {
                   </>
                 ) : (
                   <button
+                    // eslint-disable-next-line
                     onClick={() => signIn()}
                     className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                   >
@@ -238,7 +245,7 @@ export default function Navbar() {
                       height={600}
                       width={450}
                       src={user.imageUrl as string}
-                      alt={`image of ${user.name}`}
+                      alt={`image of ${user.name as string}`}
                     />
                   </div>
                 )}
@@ -266,13 +273,14 @@ export default function Navbar() {
                       as="a"
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
-                      <Link href={`/user/${sessionData.user?.id}`}>
+                      <Link href={`/user/${sessionData.user?.id as string}`}>
                         User Profile
                       </Link>
                     </Disclosure.Button>
                     <Disclosure.Button
                       key={"Sign Out"}
                       as="a"
+                      // eslint-disable-next-line
                       onClick={() => signOut()}
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                     >
@@ -283,6 +291,7 @@ export default function Navbar() {
                   <Disclosure.Button
                     key={"Sign In"}
                     as="a"
+                    // eslint-disable-next-line
                     onClick={() => signIn()}
                     className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                   >

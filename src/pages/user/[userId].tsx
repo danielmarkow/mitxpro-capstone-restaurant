@@ -31,9 +31,12 @@ dayjs.updateLocale("en", {
 export default function UserProfile() {
   const { data: sessionData } = useSession();
 
-  const orderQuery = api.order.getOrders.useQuery({
-    userId: sessionData?.user?.id,
-  });
+  const orderQuery = api.order.getOrders.useQuery(
+    {
+      userId: sessionData?.user?.id as string,
+    },
+    { enabled: !!sessionData }
+  );
 
   if (sessionData) {
     return (
@@ -43,8 +46,8 @@ export default function UserProfile() {
             <Image
               className="h-300 w-225 mb-3 "
               // TODO add default user profile image
-              src={sessionData.user?.image}
-              alt={sessionData.user?.name}
+              src={sessionData.user?.image as string}
+              alt={sessionData.user?.name as string}
               height={150}
               width={112}
             />
