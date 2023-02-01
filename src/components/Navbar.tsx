@@ -162,61 +162,74 @@ export default function Navbar() {
                     <Popover.Panel className="absolute inset-x-0 top-16 mt-px bg-white pb-6 shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:mt-3 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5">
                       <h2 className="sr-only">Shopping Cart</h2>
 
-                      {sessionData && cart.isSuccess && (
-                        <form className="mx-auto max-w-2xl px-4">
-                          <ul role="list" className="divide-y divide-gray-200">
-                            {cart.isSuccess &&
-                              cart.data.map((item) => (
-                                <li
-                                  key={item.id}
-                                  className="flex items-center py-6"
-                                >
-                                  <Image
-                                    src={`/images/dishes/${item.dish.image}`}
-                                    alt={`image of dish ${item.dish.name}`}
-                                    height={600}
-                                    width={450}
-                                    className="h-16 w-16 flex-none rounded-md border border-gray-200"
-                                  />
-                                  <div className="ml-4 flex-auto">
-                                    <h3 className="font-medium text-gray-900">
-                                      {item.dish.name}
-                                    </h3>
-                                    <p className="text-gray-500">
-                                      {item.dish.description} x {item.quantity}
-                                    </p>
-                                  </div>
-                                </li>
-                              ))}
-                          </ul>
-                          <button
-                            type="submit"
-                            className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              checkoutMutation.mutate({
-                                userId: sessionData?.user?.id,
-                              });
-                            }}
-                          >
-                            Checkout
-                          </button>
-
-                          <p className="mt-6 text-center">
-                            <Link
-                              href="/cart"
-                              className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                      {sessionData &&
+                        cart.isSuccess &&
+                        cart.data.length > 0 && (
+                          <form className="mx-auto max-w-2xl px-4">
+                            <ul
+                              role="list"
+                              className="divide-y divide-gray-200"
                             >
-                              View Shopping Cart
-                            </Link>
-                          </p>
-                        </form>
-                      )}
+                              {cart.isSuccess &&
+                                cart.data.map((item) => (
+                                  <li
+                                    key={item.id}
+                                    className="flex items-center py-6"
+                                  >
+                                    <Image
+                                      src={`/images/dishes/${item.dish.image}`}
+                                      alt={`image of dish ${item.dish.name}`}
+                                      height={600}
+                                      width={450}
+                                      className="h-16 w-16 flex-none rounded-md border border-gray-200"
+                                    />
+                                    <div className="ml-4 flex-auto">
+                                      <h3 className="font-medium text-gray-900">
+                                        {item.dish.name}
+                                      </h3>
+                                      <p className="text-gray-500">
+                                        {item.dish.description} x{" "}
+                                        {item.quantity}
+                                      </p>
+                                    </div>
+                                  </li>
+                                ))}
+                            </ul>
+                            <button
+                              type="submit"
+                              className="w-full rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                checkoutMutation.mutate({
+                                  userId: sessionData?.user?.id,
+                                });
+                              }}
+                            >
+                              Checkout
+                            </button>
+
+                            <p className="mt-6 text-center">
+                              <Link
+                                href="/cart"
+                                className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                              >
+                                View Shopping Cart
+                              </Link>
+                            </p>
+                          </form>
+                        )}
                       {!sessionData && (
                         <p className="mt-1 ml-1 text-sm text-gray-400">
                           log in to view cart
                         </p>
                       )}
+                      {sessionData &&
+                        cart.isSuccess &&
+                        cart.data.length === 0 && (
+                          <p className="mt-1 ml-1 text-sm text-gray-400">
+                            no items in the cart
+                          </p>
+                        )}
                     </Popover.Panel>
                   </Transition>
                 </Popover>

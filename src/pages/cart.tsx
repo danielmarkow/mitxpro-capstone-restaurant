@@ -159,9 +159,11 @@ export default function Cart() {
                       <dd className="text-base font-medium text-gray-900">
                         $
                         {cart.isSuccess &&
-                          cart.data.reduce((acc, item) => {
-                            return acc + item.quantity * item.dish.price;
-                          }, 0)}
+                          cart.data
+                            .reduce((acc, item) => {
+                              return acc + item.quantity * item.dish.price;
+                            }, 0)
+                            .toFixed(2)}
                       </dd>
                     </div>
                   </dl>
